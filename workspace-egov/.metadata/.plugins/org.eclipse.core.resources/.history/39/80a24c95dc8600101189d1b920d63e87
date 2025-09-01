@@ -1,0 +1,11 @@
+package Config;
+
+public class WebConfig {
+	@Bean
+    public ViewResolver internalResourceViewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/WEB-INF/views/");
+        resolver.setSuffix(".jsp");
+        return resolver;
+    }
+}

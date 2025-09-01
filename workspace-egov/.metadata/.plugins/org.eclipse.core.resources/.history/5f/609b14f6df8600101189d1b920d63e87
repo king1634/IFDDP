@@ -1,0 +1,40 @@
+package Controller;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import lombok.RequiredArgsConstructor;
+
+@Controller
+@RequiredArgsConstructor
+public class MainController {
+//	@Autowired
+//	private final SqlSessionFactory sqlSessionFactory;
+	
+
+    @RequestMapping("/main.do")
+    public String main() {
+    	System.out.println("main");
+    	// DB연결
+    	String driver = "org.postgresql.Driver" ;
+		String url    = "jdbc:postgresql://127.0.0.1:5432/postgres";
+		
+		try
+		{
+			Class.forName(driver);
+			Connection conn = DriverManager.getConnection(url, "postgres", "postgre");
+			if(conn!=null) {
+				System.out.println("postgresql 연결 성공");
+			}
+			conn.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("postgresql 연결 실패");
+		}
+    	
+        return "main";
+    }
+}
