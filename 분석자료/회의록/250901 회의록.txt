@@ -1,0 +1,61 @@
+★★★Postgre 비밀번호★★★
+Postgre admin 계정 비밀번호 : postgre
+
+★★★프로젝트 명★★★
+Group ID : SundoSoft
+Porject Name : IFDDP
+※ IFDDP(Integrated facility damage diagnosis platform) : 시설물의 손상진단 통합 플랫폼
+
+★★★포트★★★
+PostgreSql Port : 5432
+Tomcat Port : 8181
+GeoServer Port : 8081
+
+★★★PostGIS 적용방법★★★
+Postgresql(Stack Builder) 설치 설정
+○Add-ons, tools and utilities
+- pgAgent (64 bit) for PostgreSQL 15 v4.2.3-1
+○Database Drivers
+- psqlODBC (64 bit) v13.02.0000-1
+○Spactial Extensions
+- PostGIS 3.5 Bundle for PostgreSQL 15 (64 bit) v3.5.3
+
+★★★PostGIS 적용확인★★★
+0. 적용
+CREATE EXTENSION postgis;
+CREATE EXTENSION postgis_topology;
+
+기본 설치 확인 쿼리
+1. PostGIS 버전 확인
+sqlSELECT PostGIS_Version();
+2. PostGIS 확장 설치 여부 확인
+sqlSELECT name, default_version, installed_version 
+FROM pg_available_extensions 
+WHERE name LIKE 'postgis%';
+3. 설치된 확장 목록 확인
+sqlSELECT extname, extversion 
+FROM pg_extension 
+WHERE extname LIKE 'postgis%';
+4. PostGIS 관련 함수 개수 확인
+sqlSELECT COUNT(*) as postgis_functions
+FROM pg_proc 
+WHERE proname LIKE 'st_%';
+5. 공간 참조 시스템(SRID) 테이블 확인
+sqlSELECT COUNT(*) as srid_count 
+FROM spatial_ref_sys;
+6. 기본 공간 함수 테스트
+sqlSELECT ST_AsText(ST_Point(126.9780, 37.5665)) as seoul_point;
+7. PostGIS 구성 요소 전체 확인
+sqlSELECT PostGIS_Full_Version();
+설치되지 않은 경우 설치
+PostGIS 확장 설치
+sqlCREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS postgis_topology;
+설치 권한 확인
+sqlSELECT current_user, session_user;
+
+★★★데이터 셋 가져오기★★★
+○건물 균열 탐지 이미지(필수) 3.7TB
+○노후 시설물 이미지(선택?) 2.6TB
+○건물 균열 탐지 이미지 (고도화)- SOC 시설물 균열패턴 이미지 데이터 119GB
+
