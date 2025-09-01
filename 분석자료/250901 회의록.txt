@@ -1,0 +1,9 @@
+Postgre admin 계정 비밀번호 : postgre
+
+Group ID : SundoSoft
+Porject Name : IFDDP
+※ IFDDP(Integrated facility damage diagnosis platform) : 시설물의 손상진단 통합 플랫폼
+
+PostgreSql Port : 5432
+Tomcat Port : 8181
+GeoServer Port : 8081
