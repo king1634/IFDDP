@@ -59,3 +59,27 @@ sqlSELECT current_user, session_user;
 ○노후 시설물 이미지(선택?) 2.6TB
 ○건물 균열 탐지 이미지 (고도화)- SOC 시설물 균열패턴 이미지 데이터 119GB
 
+★★★GeoSever 사용법★★★
+○접속 : localhost:8081/geoserver
+○로그인 : admin/geoserver
+○작업공간 생성
+○저장소 생성
+○레이어 생성
+- 레이어를 위한 테이블/뷰가 있어야 함
+=========테이블 생성=========
+CREATE TABLE sample_points (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    geom GEOMETRY(Point, 4326)
+);
+=========테이블 생성=========
+=========테이블 데이터 추가=========
+INSERT INTO sample_points (name, geom)
+VALUES 
+('서울', ST_SetSRID(ST_MakePoint(126.9784, 37.5665), 4326)),
+('부산', ST_SetSRID(ST_MakePoint(129.0756, 35.1796), 4326));
+=========테이블 데이터 추가=========
+-레이어 자동으로 생성됨(발행까지 해야 하는지는 아직 확인 안됨)
+○html/jsp에서 geoserver의 작업공간,저장소,레이어 접근으로 gis 로드 가능
+- geoserver.html 참고
+
