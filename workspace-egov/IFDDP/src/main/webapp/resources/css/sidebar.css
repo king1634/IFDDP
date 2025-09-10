@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+/* ───────── 기본 사이드바 ───────── */
+.sidebar{
+  position:fixed; left:0; top:0; bottom:0;
+  width:var(--sbw);
+  background:var(--c-base);
+  padding:16px 10px;
+  color:var(--c-text);
+  display:flex; flex-direction:column; gap:10px;
+  transition:width .2s ease;
+  z-index:3000;
+  box-sizing:border-box;
+  overflow-x: hidden; /* 모바일에서 override 예정 */
+}
+.sidebar.collapsed{ width:var(--sbw-c); }
+
+.brand{
+  display:flex; align-items:center; gap:10px;
+  padding:10px;
+  font-weight:800;
+  padding-right: 8px; /* 토글 아이콘 너무 끝으로 붙지 않게 */
+}
+.brand .logo{
+  width:34px; height:34px; border-radius:8px; background:#fff; color:#0c3a67;
+  display:inline-flex; align-items:center; justify-content:center; font-weight:900;
+}
+
+/* 토글 버튼 */
+.toggle{
+  margin-left:auto; margin-right:0;
+  border:0; background:transparent;
+  color:#cfe4ff; cursor:pointer;
+  font-size:18px; line-height:1; padding:4px;
+  border-radius:8px;
+}
+.sidebar.collapsed .toggle{ margin:0 auto; }
+
+.nav{
+  list-style:none; margin:8px 0 0; padding:0;
+  display:flex; flex-direction:column; gap:6px;
+}
+.nav a{
+  display:flex; align-items:center; gap:14px;
+  height:44px; padding:0 14px; border-radius:8px;
+  color:var(--c-text); text-decoration:none; background:var(--c-item);
+  transition:background .15s;
+}
+.nav a:hover{ background:var(--c-hover); }
+.nav .label{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.nav a.active{ background:var(--c-accent); color:#0d2850; font-weight:700; }
+
+/* 접힘 시 텍스트 숨김 + 아이콘 중앙 */
+.sidebar.collapsed .brand .title,
+.sidebar.collapsed .nav .label{ display:none; }
+.sidebar.collapsed .nav a{ justify-content:center; }
+
+/* ───────── 태블릿(≤992px): 아이콘 레일 ───────── */
+@media (max-width: 991.98px){
+  .sidebar{ width: var(--sbw-c); }
+  .brand .title,
+  .nav .label{ display:none; }
+  .nav a{ justify-content:center; }
+}
+
+/* ───────── 모바일(≤576px): 하단바 ───────── */
+@media (max-width: 575.98px){
+  .sidebar{
+    position: fixed;
+    left: 0; right: 0; bottom: 0; top: auto;
+    width: 100%;
+    height: var(--sb-bottom);
+    padding: 8px 10px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;   /* 아이콘이 많아질 때 좌측부터 흘러가도록 */
+    gap: 10px;
+    overflow-x: auto;              /* ← 기본 hidden 덮어쓰기 */
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav{ flex-direction: row; gap: 10px; margin: 0; }
+  .nav a{
+    height: 44px;
+    padding: 0 12px;
+    border-radius: var(--radius);
+    justify-content: center;
+  }
+
+  .brand .title,
+  .nav .label{ display: none; }
+  .toggle{ display: none; } /* 하단바에서 토글 숨김(선택) */
+}

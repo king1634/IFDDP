@@ -1,0 +1,19 @@
+@charset "UTF-8";
+:root{
+  --sbw: 240px;   		/* 사이드바 펼침 폭 */
+  --sbw-c: 64px;  		/* 사이드바 접힘 폭  */
+  --hdh: 56px;    		/* 헤더 높이        */
+  --sb-bottom: 64px; 	/* 모바일 하단바 높이 */
+  /* 색상 */
+  --c-header:#5a97c8;
+  --c-base:#0e4f88;   /* 사이드바 바탕 */
+  --c-item:#0c4276;   /* 사이드 아이템 */
+  --c-hover:#115da1;
+  --c-accent:#e0b300;
+  --c-text:#ffffff;
+  --c-subtext:#b9d4ff;
+
+  --radius:10px;
+}
+
+html,body{ height:100%; margin:0; background:#fff; }
