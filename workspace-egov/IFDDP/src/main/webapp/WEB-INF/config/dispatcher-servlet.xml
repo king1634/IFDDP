@@ -12,8 +12,10 @@
 	    <property name="suffix" value=".jsp" />
 	</bean>
 	
-	<context:component-scan base-package="Controller" />
-	
+    <context:component-scan base-package="Controller" />
+    <context:component-scan base-package="Service" />
+    <context:component-scan base-package="Repository" />
+    	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	
 	<mvc:annotation-driven />
