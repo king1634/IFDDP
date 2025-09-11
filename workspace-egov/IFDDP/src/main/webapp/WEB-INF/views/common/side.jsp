@@ -21,7 +21,7 @@
 		<li><a href="#"> <i class="bi bi-journal-richtext"></i><span
 				class="label">손상진단 시뮬레이션</span>
 		</a></li>
-			<li><a href="#"> <i class="bi bi-journal-richtext"></i><span
+			<li><a href="${pageContext.request.contextPath}/facilityList.do"> <i class="bi bi-journal-richtext"></i><span
 				class="label">시설물 관리</span>
 		</a></li>
 		<!-- 필요 메뉴를 계속 추가하세요 -->

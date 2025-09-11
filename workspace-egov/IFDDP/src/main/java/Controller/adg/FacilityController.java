@@ -14,8 +14,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FacilityController {
 	private final FacilityService facilityService;
+	
+	@GetMapping("/facilityList.do")
+	public String showFacilityList() {
+		
+		return "facilityManage/facilityList";
+	}
 
-	@GetMapping(value = "facility", produces = "application/json")
+	@GetMapping(value = "/facility", produces = "application/json")
     @ResponseBody
 	public List<FacilityDto> startAgingPattern() {
 		List<FacilityDto> dtos = facilityService.getAllFacility();
