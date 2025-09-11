@@ -1,8 +1,12 @@
 package Controller.adg;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import Dto.adg.FacilityDto;
 import Service.adg.FacilityService;
 import lombok.RequiredArgsConstructor;
 
@@ -11,10 +15,11 @@ import lombok.RequiredArgsConstructor;
 public class FacilityController {
 	private final FacilityService facilityService;
 
-	@GetMapping("facility")
-	public String startAgingPattern() {
+	@GetMapping(value = "facility", produces = "application/json")
+    @ResponseBody
+	public List<FacilityDto> startAgingPattern() {
+		List<FacilityDto> dtos = facilityService.getAllFacility();
 		
-		
-		return "agingPattern";
+		return dtos;
 	}
 }
