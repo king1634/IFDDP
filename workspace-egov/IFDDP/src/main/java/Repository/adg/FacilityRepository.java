@@ -6,5 +6,5 @@ import Dto.adg.FacilityDto;
 
 public interface FacilityRepository {
 	// 모든 시설물 조회
-	List<FacilityDto> getAllFacility();
+	List<FacilityDto> getAllFacility(int page, int size);
 }

@@ -1,0 +1,61 @@
+@charset "UTF-8";
+
+.main-title {
+    font-size: 44px;
+    font-weight: bold;
+    color: #2c3e50; /* 짙은 네이비/차콜 계열 */
+    letter-spacing: -0.5px; /* 글자 간격 */
+    line-height: 1.2; /* 줄 간격 */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.main-title-line {
+	border: 2px solid #2c3e50;  /* 두께 색상 스타일 순서 */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.board-table {
+    width: 100%;
+    border-collapse: collapse; /* 셀 경계선 병합 */
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.board-table thead th {
+    background-color: #D3DEEC; /* 헤더 배경색 - 이전에 추천했던 색상 */
+    color: #3C4257; /* 헤더 글씨색 */
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 2px solid #C2D5E8; /* 헤더 아래 선 */
+    font-weight: bold;
+}
+
+.board-table tbody td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e9ecef; /* 바디 아래 선 */
+    vertical-align: middle;
+}
+
+.board-table tbody tr:hover {
+    background-color: #C2D5E8; /* 마우스 오버 하이라이트! 전에 추천했던 색상 */
+    cursor: pointer; /* 클릭 가능한 느낌만 주기 */
+    transition: background-color 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.board-table tbody tr:last-child td {
+    border-bottom: none; /* 마지막 줄은 아래 선 없음 */
+}
+
+.no-data {
+    text-align: center;
+    padding: 50px 0;
+    color: #6c757d;
+}

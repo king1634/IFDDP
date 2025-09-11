@@ -4,6 +4,6 @@
 
 <mapper namespace="Facility">
     <select id="getAllFacility" resultType="Dto.adg.FacilityDto">
-        SELECT * FROM Facility 
+        SELECT * FROM Facility LIMIT ${size} OFFSET ${page};
     </select>
 </mapper>

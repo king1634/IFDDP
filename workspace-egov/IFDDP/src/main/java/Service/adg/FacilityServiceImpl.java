@@ -14,9 +14,9 @@ public class FacilityServiceImpl implements FacilityService {
 	private final FacilityRepository facilityRepository;
 
 	@Override
-	public List<FacilityDto> getAllFacility() {
+	public List<FacilityDto> getAllFacility(int page, int size) {
 		
-		return facilityRepository.getAllFacility();
+		return facilityRepository.getAllFacility(page, size);
 	}
 	
 }
