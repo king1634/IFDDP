@@ -1,6 +1,8 @@
 package Repository.adg;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -14,12 +16,17 @@ public class FacilityRepositoryImpl implements FacilityRepository {
 	private final SqlSession sqlSession;
 
 	@Override
-	public List<FacilityDto> getAllFacility() {
+	public List<FacilityDto> getAllFacility(int page, int size) {
+		// 리턴용 데이터 설정
 		List<FacilityDto> facilityDtos = null;
 		
+		// 파라미터 설정
+		Map<String, Object> params = new HashMap<>();
+		params.put("page", page);
+		params.put("size", size);
+		
 		try {
-//			int dbVersion = sqlSession.selectOne("Facility.getAllFacility");
-			facilityDtos = sqlSession.selectList("Facility.getAllFacility");
+			facilityDtos = sqlSession.selectList("Facility.getAllFacility", params);
 			
 			System.out.println(facilityDtos);
 		}
