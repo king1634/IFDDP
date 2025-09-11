@@ -19,7 +19,7 @@ public class MainController {
     private SqlSession sqlSession;
 	
 
-    @RequestMapping("/main.do")
+    @RequestMapping("/")
     public String main(Model model) {
     	System.out.println("main");
     	try {

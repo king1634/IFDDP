@@ -149,24 +149,25 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Postgresql Connect -->
+		<!-- 추가 : Postgresql Connect -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>42.7.7</version> <!-- 최신 버전 사용 -->
 		</dependency>
-		<!-- context-datasource.xml에서 BasicDataSource를 찾기 위한 설정 -->
+		<!-- 추가 : context-datasource.xml에서 BasicDataSource를 찾기 위한 설정 -->
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-dbcp2</artifactId>
 		    <version>2.9.0</version>
 		</dependency>
-		<!-- MyBatis -->
+		<!-- 추가 : MyBatis -->
 		<dependency>
 		    <groupId>org.mybatis</groupId>
 		    <artifactId>mybatis</artifactId>
 		    <version>3.5.9</version>
 		</dependency>
+		<!-- 추가 : MyBatis2 -->
 		<dependency>
 		    <groupId>org.mybatis</groupId>
 		    <artifactId>mybatis-spring</artifactId>
