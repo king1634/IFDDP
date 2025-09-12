@@ -16,7 +16,7 @@
 <!-- 헤더/content css -->
 <!-- adg css -->
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/adgStyle.css">
+	href="${pageContext.request.contextPath}/resources/css/facilityListStyle.css">
 </head>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -144,7 +144,14 @@
 		<div class="main-title">시설물 목록</div>
 		<hr class="main-title-line">
 		
-		<div>검색 항목</div>
+		<div class="control-div">
+			<!-- 등록 -->
+			<button class="regist-btn" onclick="location.href='facilityRegist.do'">등록버튼</button>
+			<button class="regist-btn">Excel 다운로드</button>
+			<button class="regist-btn">Excel 업로드</button>
+			<!-- 검색 -->
+			<!-- <label>검색 항목</label> -->
+		</div>
 		
 		<table class="board-table">
             <thead>

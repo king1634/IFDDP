@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import Dto.adg.BunryuDto;
 import Dto.adg.FacilityDto;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +27,7 @@ public class FacilityRepositoryImpl implements FacilityRepository {
 		params.put("size", size);
 		
 		try {
+			// SELECT : 시설물 데이터
 			facilityDtos = sqlSession.selectList("Facility.getAllFacility", params);
 			
 			System.out.println(facilityDtos);
@@ -36,6 +38,25 @@ public class FacilityRepositoryImpl implements FacilityRepository {
 		}
 
 		return facilityDtos;
+	}
+
+	@Override
+	public List<BunryuDto> getAllFacilityType() {
+		// 리턴용 데이터 설정
+		List<BunryuDto> bunryuDtos = null;
+		
+		try {
+			// SELECT : 시설물의 모든 종류
+			bunryuDtos = sqlSession.selectList("Facility.getAllFacilityType");
+			
+			System.out.println(bunryuDtos);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("TT");
+		}
+
+		return bunryuDtos;
 	}
 
 }
