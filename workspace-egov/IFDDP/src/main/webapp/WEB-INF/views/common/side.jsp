@@ -8,7 +8,7 @@
 
 <aside class="sidebar" id="sidebar" role="navigation" aria-label="사이드바">
 	<div class="brand">
-		<span class="logo">I</span> <span class="title">IFDDP</span>
+		<span class="logo">IF</span> <span class="title">IFDDP</span>
 		<button type="button" class="toggle" id="sbToggle" title="축소/확장">
 			<i class="bi bi-chevron-double-left"></i>
 		</button>

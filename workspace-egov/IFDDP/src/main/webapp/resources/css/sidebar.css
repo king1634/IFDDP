@@ -79,6 +79,8 @@
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
   }
+    .sidebar,
+  .sidebar.collapsed{ width:100%; left:0; right:0; bottom:0; top:auto; }
 
   .nav{ flex-direction: row; gap: 10px; margin: 0; }
   .nav a{
@@ -92,3 +94,5 @@
   .nav .label{ display: none; }
   .toggle{ display: none; } /* 하단바에서 토글 숨김(선택) */
 }
+
+
