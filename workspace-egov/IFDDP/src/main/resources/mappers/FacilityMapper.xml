@@ -4,6 +4,11 @@
 
 <mapper namespace="Facility">
     <select id="getAllFacility" resultType="Dto.adg.FacilityDto">
-        SELECT * FROM Facility LIMIT ${size} OFFSET ${page};
+        SELECT * FROM Facility LIMIT ${size} OFFSET ${page}
+    </select>
+    
+    <select id="getAllFacilityType" resultType="Dto.adg.BunryuDto">
+        SELECT * FROM bunryu 
+        WHERE "BCD" = 200 AND "MCD" != 999
     </select>
 </mapper>

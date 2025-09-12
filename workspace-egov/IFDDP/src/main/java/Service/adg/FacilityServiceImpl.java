@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import Dto.adg.BunryuDto;
 import Dto.adg.FacilityDto;
 import Repository.adg.FacilityRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,12 @@ public class FacilityServiceImpl implements FacilityService {
 	public List<FacilityDto> getAllFacility(int page, int size) {
 		
 		return facilityRepository.getAllFacility(page, size);
+	}
+
+	@Override
+	public List<BunryuDto> getAllFacilityType() {
+		
+		return facilityRepository.getAllFacilityType();
 	}
 	
 }

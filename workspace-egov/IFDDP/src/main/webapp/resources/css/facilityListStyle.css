@@ -11,15 +11,7 @@
 
 .main-title-line {
 	border: 2px solid #2c3e50;  /* 두께 색상 스타일 순서 */
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+	margin-bottom: 20px;
 }
 
 .board-table {
@@ -59,3 +51,28 @@
     padding: 50px 0;
     color: #6c757d;
 }
+	
+.control-div {
+	width: 100%;
+	display: flex; /* 정렬 : 가로 정렬 기본값 */
+	flex-direction: row; /* 가로 정렬 */
+	gap: 10px;
+}
+
+.control-div .regist-btn {
+    background: #D3DEEC; /* 깔끔한 하늘색 */
+    color: #3C4257; /* 배경보다 조금 어두운 색 */
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    /* 전환 효과: 마우스 오버 시 부드럽게 변하도록 */
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    text-align: center;
+    /* 텍스트 장식: 없애기 (링크처럼 보이지 않게) */
+    text-decoration: none;
+    display: inline-block; /* 버튼이 내용만큼 크기를 차지하고 옆으로 나열 */
+}
+
+
