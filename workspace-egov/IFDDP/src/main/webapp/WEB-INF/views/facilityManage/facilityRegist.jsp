@@ -34,7 +34,8 @@ $(document).ready(function() {
             // 데이터가 바로 배열 형태로 오는 경우
             $.each(data, function(index, district) {
                 // console.log(index, district);
-                options += "<option value=" + district.code + ">" + district.name + "</option>";
+                // options += "<option value=" + district.code + ">" + district.name + "</option>";
+                options += "<option value=" + district.name + ">" + district.name + "</option>";
             });
             
             // console.log(options);
@@ -53,7 +54,7 @@ $(document).ready(function() {
         dataType: 'json',
         success: function(data) {
             // 2. select 옵션 생성하기
-            let options = '<option value="999">시설물 종류 선택</option>';
+            let options = '';
             
             // 3. 데이터 순회하면서 옵션 추가
             $.each(data, function(index, facilityType) {
@@ -85,13 +86,13 @@ $(document).ready(function() {
 		<hr class="main-title-line">
 		
 		<!-- 시설물 등록 정보 입력 -->
-		<form id="registFacility" onsubmit="return validateForm()">
+		<form id="registFacility" action="${pageContext.request.contextPath}/facilityRegist" method="post">
 			<div class="form-groups">
 				<div class="form-row-group">
 					<div class="form-group">
 		                <label for="facilityName">시설물 명</label>
 		                <p/>
-		                <input type="text" id="facilityName" class="form-control" placeholder="시설물 명" required="required">
+		                <input type="text" name="facilityName" class="form-control" placeholder="시설물 명" required="required">
 		            </div>
 				</div>
 				<div class="form-row-group">
@@ -99,29 +100,29 @@ $(document).ready(function() {
 		                <label for="facilityRegion">시설물 주소</label>
 		                <p/>
 		                <div style="display: flex; gap: 10px;">
-			                <select id="region-sido" style="width: 50%">
-			                	<option>서울시</option>
+			                <select id="region-sido" name="regionSido" style="width: 50%">
+			                	<option value="서울특별시">서울특별시</option>
 			                </select>
-			                <select id="region-sigungu" style="width: 50%">
+			                <select id="region-sigungu" name="regionSigungu" style="width: 50%">
 			                </select>
 		                </div>
 		            </div>
 					<div class="form-group half-width">
 		                <label for="facilityAddress">시설물 상세 주소</label>
 		                <p/>
-		                <input type="text" id="facilityAddress" class="form-control" placeholder="시설물 상세 주소">
+		                <input type="text" id="facilityAddress" name="address" class="form-control" placeholder="시설물 상세 주소">
 		            </div>
 				</div>
 				<div class="form-row-group">
 					<div class="form-group half-width">
 		                <label for="facilityType">시설물 종류</label>
 		                <p/>
-		                <select id="facilityType"></select>
+		                <select id="facilityType" name="facilityType"></select>
 		            </div>
 					<div class="form-group half-width">
 		                <label for="facilityScale">시설물 규모</label>
 		                <p/>
-		                <select>
+		                <select name="facilityScale">
 		                	<option value="1">1종</option>
 		                	<option value="2">2종</option>
 		                	<option value="3">3종</option>
@@ -133,10 +134,12 @@ $(document).ready(function() {
 		                <label for="facilityGeom">시설물 위치좌표</label>
 		                <p/>
 		                <div style="display: flex; gap: 10px;">
-			                <label style="display: flex; align-items: center; height: 30px; margin: auto;">X:</label>
-			                <input type="text" id="facilityGeomX" class="form-control" placeholder="시설물 위치좌표 X" required="required">
-			                <label style="display: flex; align-items: center; height: 30px; margin: auto;">Y:</label>
-			                <input type="text" id="facilityGeomY" class="form-control" placeholder="시설물 위치좌표 Y" required="required">
+			                <label style="display: flex; align-items: center; height: 30px; margin: auto;">위도(Lat):</label>
+			                <input type="number" id="facilityGeomX" name="facilityGeomX" class="form-control" placeholder="시설물 위도(Lat)" required="required"
+			                step="0.000001" min="33" max="39" value="37.55438">
+			                <label style="display: flex; align-items: center; height: 30px; margin: auto;">경도(Lon):</label>
+			                <input type="number" id="facilityGeomY" name="facilityGeomY" class="form-control" placeholder="시설물 경도(Lon)" required="required"
+			                step="0.000001" min="125" max="131" value="126.90926">
 		                </div>
 		            </div>
 				</div>
@@ -144,7 +147,7 @@ $(document).ready(function() {
 					<div class="form-group">
 		                <label for="facilityYearBuilt">준공년도</label>
 		                <p/>
-		                <input type="date" id="facilityYearBuilt" class="form-control" placeholder="준공년도">
+		                <input type="date" id="facilityYearBuilt" name="yearBuilt" class="form-control" placeholder="준공년도">
 		                <script>
 							// 오늘 날짜 가져오기
 							const today = new Date();
@@ -162,7 +165,7 @@ $(document).ready(function() {
 				</div>
 				<div style="display: flex; justify-content: flex-end; gap: 10px;">
 					<button type="submit" class="regist-btn">등록</button>
-					<button class="cancel-btn">취소</button>
+					<button type="button" class="cancel-btn" onclick="location.href='${pageContext.request.contextPath}/facilityList.do'">취소</button>
 				</div>
 			</div>
 		</form>

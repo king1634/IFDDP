@@ -11,4 +11,7 @@ public interface FacilityRepository {
 
 	// 모든 시설물 종류
 	List<BunryuDto> getAllFacilityType();
+	
+	// 시설물 등록
+	int registFacility(FacilityDto facilityDto);
 }

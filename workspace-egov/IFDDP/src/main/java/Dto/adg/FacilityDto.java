@@ -2,6 +2,8 @@ package Dto.adg;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -13,5 +15,12 @@ public class FacilityDto {
 	private String 	geom; // 시설물 위치 좌표
 	private String 	region; // 시설물 지역
 	private String 	address; // 시설물 상세 주소
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date 	yearBuilt; // 준공년도
+	
+//	등록용 DTO
+	private String regionSido;
+	private String regionSigungu;
+	private double facilityGeomX;
+	private double facilityGeomY;
 }

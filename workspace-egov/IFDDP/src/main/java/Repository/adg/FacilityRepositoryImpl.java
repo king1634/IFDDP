@@ -30,11 +30,11 @@ public class FacilityRepositoryImpl implements FacilityRepository {
 			// SELECT : 시설물 데이터
 			facilityDtos = sqlSession.selectList("Facility.getAllFacility", params);
 			
-			System.out.println(facilityDtos);
+			// System.out.println(facilityDtos);
 		}
 		catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("TT");
+			System.out.println("시설물 가져오기 실패");
 		}
 
 		return facilityDtos;
@@ -49,14 +49,33 @@ public class FacilityRepositoryImpl implements FacilityRepository {
 			// SELECT : 시설물의 모든 종류
 			bunryuDtos = sqlSession.selectList("Facility.getAllFacilityType");
 			
-			System.out.println(bunryuDtos);
+			// System.out.println(bunryuDtos);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("시설물 종류 가져오기 실패");
+		}
+
+		return bunryuDtos;
+	}
+
+	@Override
+	public int registFacility(FacilityDto facilityDto) {
+		int result = 0;//실패 기본 설정
+		
+		try {
+			System.out.println(facilityDto);
+			// INSERT : 시설물
+			result = sqlSession.insert("Facility.insertFacility", facilityDto);
 		}
 		catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("TT");
+			System.out.println(e);
+			return result;//실패
 		}
-
-		return bunryuDtos;
+		
+		return result;
 	}
 
 }
