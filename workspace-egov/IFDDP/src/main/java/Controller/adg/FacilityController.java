@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
@@ -42,13 +43,6 @@ public class FacilityController {
 		return "facilityManage/facilityList";
 	}
 	
-	@GetMapping("/facilityRegist.do")
-	public String showFacilityRegist(Model model) {
-		// 등록 페이지로 이동
-
-		return "facilityManage/facilityRegist";
-	}
-	
 	@GetMapping(value = "/facility", produces = "application/json")
     @ResponseBody
 	public List<FacilityDto> getFacility(
@@ -63,6 +57,24 @@ public class FacilityController {
 		return facilityDtos;
 	}
 
+	@GetMapping("/facilityRegist.do")
+	public String showFacilityRegist(Model model) {
+		// 등록 페이지로 이동
+		return "facilityManage/facilityRegist";
+	}
+	@PostMapping("/facilityRegist")
+	public String postfacilityRegist(FacilityDto facilityDto) {
+		// 입력 데이터 확인
+		System.out.println(facilityDto);
+		
+		// 시설물 등록
+		int result = facilityService.registFacility(facilityDto);
+		
+		// 시설물 목록으로 이동
+    	return "redirect:/facilityList.do";
+	}
+	
+	
 	@GetMapping(value = "/allFacilityType", produces = "application/json")
     @ResponseBody
 	public List<BunryuDto> getFacilityType() {

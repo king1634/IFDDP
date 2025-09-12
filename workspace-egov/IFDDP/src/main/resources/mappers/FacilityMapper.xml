@@ -11,4 +11,24 @@
         SELECT * FROM bunryu 
         WHERE "BCD" = 200 AND "MCD" != 999
     </select>
+    
+    <insert id="insertFacility" parameterType="Dto.adg.FacilityDto">
+	    INSERT INTO Facility (
+	        "FACILITY_NAME", 
+	        "FACILITY_TYPE", 
+	        "FACILITY_SCALE",
+	        "GEOM",
+	        "REGION",
+	        "ADDRESS",
+	        "YEAR_BUILT"
+	    ) VALUES (
+	        #{facilityName},
+	        #{facilityType},
+	        #{facilityScale},
+	        ST_GeomFromText('POINT(' || #{facilityGeomX} || ' ' || #{facilityGeomY} || ')', 5186),
+	        #{region},
+	        #{address},
+	        #{yearBuilt}
+	    )
+</insert>
 </mapper>
