@@ -20,6 +20,17 @@
 </head>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script type="text/javascript">
+// 컨트롤러에서 넘어온 메시지를 변수에 담기 (JSP 문법 사용)
+const successMessage = "${message}";
+const errorMessage = "${errorMessage}"; // ${errorMessage} 로 넘긴다.
+// 메시지가 비어있지 않다면 알림창 띄우기
+if (successMessage && successMessage.trim() !== "") {
+    alert(successMessage);
+}
+if (errorMessage && errorMessage.trim() !== "") {
+    alert(errorMessage);
+}
+
 //1. API에서 시설물 종류 데이터 가져오기
 $(document).ready(function() {
 	$.ajax({
@@ -48,6 +59,8 @@ $(document).ready(function() {
         }
 	})
 	
+	// 이전값 선언
+	let previousFacilityTypeValue = null;
     $.ajax({
         url: 'allFacilityType', // API 경로
         type: 'GET',
@@ -64,12 +77,141 @@ $(document).ready(function() {
             
             // 4. select 요소에 옵션 추가
             $('#facilityType').html(options);
+
+        	// 이전값 설정
+            previousFacilityTypeValue = $('#facilityType').val(); // 초기값
+            // 변경 트리거 발동
+            $('#facilityType').trigger('change');
         },
         error: function(error) {
             console.error('시설물 종류 데이터를 불러오는 데 실패했습니다:', error);
         }
     });
+	// facilityType select 변경 이벤트 감지
+    $('#facilityType').on('change', function() {
+        // 최초 선택 시 이전값이 null이면 현재값으로 설정
+        if (previousFacilityTypeValue === null) {
+            previousFacilityTypeValue = $(this).val();
+        }
+    	// 손상 정보가 있는지 확인
+    	const hasDamageRows = $('#damageTableBody tr').length > 0;
+
+    	// 손상 정보가 있을 경우에만 확인 메시지 표시
+    	if (hasDamageRows) {
+    		// 정말 진행하는지 확인
+        	if (confirm('시설물 유형을 변경하면 작성 중인 손상 정보가 모두 삭제됩니다. 계속하시겠습니까?')) {
+            	// 기존에 작성된 손상 정보 삭제
+                $('#damageTableBody').empty();
+        	}
+        	else{
+        		// 이전값 다시 선택...
+            	$(this).val(previousFacilityTypeValue); 
+        		return;
+        	}
+    	}
+    	// 이전값을 현재값으로 설정
+        previousFacilityTypeValue = $(this).val(); 
+    	
+        // 선택된 값 가져오기
+        var selectedValue = $(this).val();
+        var param = 300 + (selectedValue * 10);
+        console.log(param);
+        
+        // AJAX 호출
+        $.ajax({
+            url: 'allDamageTypeOfFacility/' + param, // 300 + (시설물Type * 10)
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+            	// 손상 정보 템플릿에 손상 유형 추가
+	            let options = '';
+
+	            // 3. 데이터 순회하면서 옵션 추가
+	            $.each(data, function(index, damageType) {
+	            	// console.log(facilityType.contents);
+	                options += "<option value=" + damageType.mcd + ">" + damageType.contents + "</option>";
+	            });
+
+	            // 4. select 요소에 옵션 추가
+	            $('select[name="damageList[INDEX_PLACEHOLDER].damageType"]').html(options);
+            },
+            error: function(xhr, status, error) {
+                console.error('데이터 로드 실패:', error);
+            }
+        });
+    });
+	
+    let damageCount = 1; // 손상 정보 입력란의 고유 번호를 관리할 변수
+    $('#addDamageBtn').on('click', function() {
+    	// 템플릿 HTML 가져오기
+        const templateHtml = $('#damageTemplate').html();
+        
+        // INDEX_PLACEHOLDER를 현재 인덱스로 교체
+        const newRowHtml = templateHtml.replace(/INDEX_PLACEHOLDER/g, damageCount);
+        
+        // 새 행 추가
+        $('#damageTableBody').append(newRowHtml);
+        
+        // console.log(newRowHtml);
+        
+        // 현재 날짜로 기본 설정
+	    var today = new Date();
+	    // YYYY-MM-DD 형식으로 변환 (input date 형식)
+	    var year = today.getFullYear();
+	    var month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작해서 +1 해줘야 함
+	    var day = String(today.getDate()).padStart(2, '0');
+	    var formattedDate = year + '-' + month + '-' + day;
+	    
+	    // console.log(formattedDate);
+	    // console.log(damageCount);
+	    
+	    // Date 찾기
+    	$('input[name="damageList[' + damageCount + '].damageDate"]').val(formattedDate);
+
+        // 카운터 증가
+        damageCount++;
+        
+        // 삭제 후 번호 재정렬 함수 호출
+        updateDamageIndices();
+    });
+	// 동적으로 생성된 요소에 대한 이벤트 처리는 이벤트 위임 방식으로 해야 한다고 합니다.
+    $(document).on('click', '.remove-damage-btn', function() {
+        // 현재 클릭한 버튼의 가장 가까운 tr 요소를 찾아서 삭제
+        $(this).closest('tr').remove();
+        
+        // 삭제 후 번호 재정렬 함수 호출
+        updateDamageIndices();
+    });
 });
+
+//인덱스 재정렬 함수
+function updateDamageIndices() {
+    // 모든 손상 행 가져오기
+    const rows = $('#damageTableBody tr');
+    
+    // 각 행에 대해 인덱스 업데이트
+    rows.each(function(index) {
+        const newIndex = index + 1;
+        
+        // 행의 data-index 속성 업데이트
+        $(this).attr('data-index', newIndex);
+        
+        // 행 번호 표시 업데이트
+        $(this).find('.damage-index').text(newIndex);
+        
+        // 모든 input, select 요소의 name 속성 업데이트
+        $(this).find('input, select, textarea').each(function() {
+            const oldName = $(this).attr('name');
+            if (oldName) {
+                const newName = oldName.replace(/damageList\[\d+\]/, 'damageList[' + newIndex + ']');
+                $(this).attr('name', newName);
+            }
+        });
+    });
+    
+    // damageCount 변수 업데이트 (총 행 개수 + 1)
+    damageCount = rows.length + 1;
+}
 </script>
 <body>
 	<%-- 사이드바 include: 반드시 BODY 안에 --%>
@@ -88,6 +230,10 @@ $(document).ready(function() {
 		<!-- 시설물 등록 정보 입력 -->
 		<form id="registFacility" action="${pageContext.request.contextPath}/facilityRegist" method="post">
 			<div class="form-groups">
+				<div>
+					<h3>시설물 정보</h3>
+					<hr>
+				</div>
 				<div class="form-row-group">
 					<div class="form-group">
 		                <label for="facilityName">시설물 명</label>
@@ -163,10 +309,73 @@ $(document).ready(function() {
 						</script>
 		            </div>
 				</div>
+				
+				<div>
+					<h3>시설물 손상 정보</h3>
+					<hr>
+				</div>
+				<!-- 손상 정보 -->
+		    	<table class="board-table">
+		            <thead>
+		                <tr>
+		                    <th>번호</th>
+		                    <th>손상 유형</th>
+		                    <th>손상 위험도</th>
+		                    <th>손상 설명</th>
+		                    <th>발생일자</th>
+		                    <th>이미지</th>
+		                    <th>삭제</th>
+		                </tr>
+		            </thead>
+          				<tbody id="damageTableBody">
+		                <!-- 손상 정보가 여기에 추가될 거야 -->
+		            </tbody>
+		    	</table>
+			    <!-- 손상 정보 추가 -->
+				<div style="text-align: center;">
+					<button type="button" id="addDamageBtn" class="btn btn-outline-secondary mt-3">
+				        ➕ 손상 정보 추가
+				    </button>
+				    <!-- 손상 정보 템플릿 -->
+					<table style="display: none;">
+					    <tbody id="damageTemplate">
+						    <tr data-index="INDEX_PLACEHOLDER">
+						        <td class="damage-index">INDEX_PLACEHOLDER</td>
+						        <td>
+						            <select class="form-select" name="damageList[INDEX_PLACEHOLDER].damageType">
+						            <!-- ajax 추가 -->
+						            </select>
+						        </td>
+						        <td>
+						            <select class="form-select" name="damageList[INDEX_PLACEHOLDER].damageLevel">
+						                <option value="">선택하세요</option>
+						                <option value="상">상</option>
+						                <option value="중">중</option>
+						                <option value="하">하</option>
+						            </select>
+						        </td>
+						        <td>
+						            <input type="text" class="form-control" name="damageList[INDEX_PLACEHOLDER].description" placeholder="손상 설명 입력">
+						        </td>
+						        <td>
+						            <input type="date" class="form-control" name="damageList[INDEX_PLACEHOLDER].damageDate">
+						        </td>
+						        <td>
+						            <input type="file" class="form-control file-input" name="damageList[INDEX_PLACEHOLDER].damageFile" multiple>
+						        </td>
+						        <td>
+						            <button type="button" class="delete-btn remove-damage-btn">삭제</button>
+						        </td>
+						    </tr>
+					    </tbody>
+					</table>
+				</div>
+			    
 				<div style="display: flex; justify-content: flex-end; gap: 10px;">
 					<button type="submit" class="regist-btn">등록</button>
 					<button type="button" class="cancel-btn" onclick="location.href='${pageContext.request.contextPath}/facilityList.do'">취소</button>
 				</div>
+				
 			</div>
 		</form>
 	</div>
