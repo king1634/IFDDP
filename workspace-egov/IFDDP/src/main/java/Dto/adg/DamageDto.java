@@ -1,9 +1,12 @@
 package Dto.adg;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -17,4 +20,7 @@ public class DamageDto {
 	private String inspectorId; // 검사관 ID
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date reportedDate; // 평가 실시일
+
+	//손상 이미지 파일
+    private List<MultipartFile> damageFiles;
 }

@@ -4,7 +4,7 @@
 
 <mapper namespace="Damage">
     <!-- 등록하고 등록된 시설물ID를 반환 -->
-    <insert id="insertDamage" parameterType="Dto.adg.DamageDto" useGeneratedKeys="true" keyProperty="DamageId">
+    <insert id="insertDamage" parameterType="Dto.adg.DamageDto" useGeneratedKeys="true" keyProperty="damageId">
 	    INSERT INTO Damage (
 	        "FACILITY_ID", 
 	        "DAMAGE_TYPE", 
@@ -21,6 +21,18 @@
 	        #{description},
 	        #{inspectorId},
 	        #{reportedDate}
+	    )
+	</insert>
+	
+	<insert id="insertDamageImg" parameterType="Dto.adg.DamageImgDto">
+	    INSERT INTO damage_img (
+	        "DAMAGE_ID", 
+	        "ORD", 
+	        "FILE_NAME"
+	    ) VALUES (
+	        #{damageId},
+	        #{ord},
+	        #{fileName}
 	    )
 	</insert>
 </mapper>
