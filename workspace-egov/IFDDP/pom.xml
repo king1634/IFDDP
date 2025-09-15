@@ -199,6 +199,12 @@
 		    <artifactId>gt-epsg-hsql</artifactId>
 		    <version>28.0</version>
 		</dependency>
+		<!--추가 : 파일 업로드를 위한 의존성 -->
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.5</version>
+		</dependency>
 	</dependencies>
 
 	<build>

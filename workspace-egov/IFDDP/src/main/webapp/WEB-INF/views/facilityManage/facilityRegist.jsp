@@ -235,7 +235,7 @@ function updateDamageIndices() {
 		<hr class="main-title-line">
 		
 		<!-- 시설물 등록 정보 입력 -->
-		<form id="registFacility" action="${pageContext.request.contextPath}/facilityRegist" method="post">
+		<form id="registFacility" action="${pageContext.request.contextPath}/facilityRegist" method="post" enctype="multipart/form-data">
 			<div class="form-groups">
 				<div>
 					<h3>시설물 정보</h3>
@@ -376,7 +376,7 @@ function updateDamageIndices() {
 						            <input type="date" class="form-control" name="damageList[INDEX_PLACEHOLDER].reportedDate">
 						        </td>
 						        <td>
-						            <input type="file" class="form-control file-input" name="damageList[INDEX_PLACEHOLDER].damageFile" multiple>
+						            <input type="file" class="form-control file-input" name="damageList[INDEX_PLACEHOLDER].damageFiles" multiple>
 						        </td>
 						        <td>
 						            <button type="button" class="delete-btn remove-damage-btn">삭제</button>

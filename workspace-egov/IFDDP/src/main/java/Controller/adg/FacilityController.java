@@ -70,7 +70,7 @@ public class FacilityController {
 	public String postfacilityRegist(FacilityDto facilityDto, RedirectAttributes redirectAttributes) {
 		// 입력 데이터 확인
 		//System.out.println(facilityDto);
-		//System.out.println(facilityDto.getDamageList());
+		System.out.println(facilityDto.getDamageList());
 		
 		// 시설물 등록
 		int result = facilityService.registFacility(facilityDto);
