@@ -18,8 +18,20 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/facilityListStyle.css">
 </head>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><!-- jquery 사용 -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script><!-- xlsx파일 사용 -->
 <script>
+	// 컨트롤러에서 넘어온 메시지를 변수에 담기 (JSP 문법 사용)
+	const successMessage = "${message}";
+	const errorMessage = "${errorMessage}"; // ${errorMessage} 로 넘긴다.
+	// 메시지가 비어있지 않다면 알림창 띄우기
+	if (successMessage && successMessage.trim() !== "") {
+	    alert(successMessage);
+	}
+	if (errorMessage && errorMessage.trim() !== "") {
+	    alert(errorMessage);
+	}
+	
     // 전역 변수 설정
     let currentPage = 1;
     const itemsPerPage = 10;
@@ -129,6 +141,41 @@
             }
         });
     }
+    
+function facilityDownload(){
+	// JSP 변수를 JavaScript 변수로 저장
+	const contextPath = "${pageContext.request.contextPath}";
+
+	/* 검색조건에 맞는 데이터 모두 가져온다(AJAX) */
+	fetch(contextPath + "/facilityDownload")
+		.then(response => response.json())
+		.then(data => {
+			
+			// 워크북 생성
+			const workbook = XLSX.utils.book_new();
+
+			// JSON을 워크시트로 변환
+			const worksheet = XLSX.utils.json_to_sheet(data);
+
+			// 워크시트를 워크북에 추가
+			XLSX.utils.book_append_sheet(workbook, worksheet, "시설물 목록");
+
+			// 현재 시간 포맷팅하기
+			const now = new Date();
+			const year = now.getFullYear();
+			const month = String(now.getMonth() + 1).padStart(2, '0');
+			const day = String(now.getDate()).padStart(2, '0');
+
+			// 시간 문자열 만들기
+			const timeString = year + month + day;
+
+			// 파일로 저장
+			// 브라우저에서는 다운로드 형태로 저장됨
+			XLSX.writeFile(workbook, "시설물 목록" + timeString + ".xlsx");
+		})
+		.catch(error => console.error("다운로드 오류:", error));
+	
+}
 </script>
 <body>
 	<%-- 사이드바 include: 반드시 BODY 안에 --%>
@@ -147,7 +194,7 @@
 		<div class="control-div">
 			<!-- 등록 -->
 			<button class="regist-btn" onclick="location.href='facilityRegist.do'">등록버튼</button>
-			<button class="regist-btn">Excel 다운로드</button>
+			<button class="regist-btn" onclick="facilityDownload()">Excel 다운로드</button>
 			<button class="regist-btn">Excel 업로드</button>
 			<!-- 검색 -->
 			<!-- <label>검색 항목</label> -->

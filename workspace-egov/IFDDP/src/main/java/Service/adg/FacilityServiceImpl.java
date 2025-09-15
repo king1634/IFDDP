@@ -21,6 +21,12 @@ public class FacilityServiceImpl implements FacilityService {
 	private final FacilityRepository facilityRepository;
 
 	@Override
+	public List<FacilityDto> getAllFacilityAllInfo() {
+		//시설물의 모든 정보를 가져온다.
+		return facilityRepository.getAllFacilityAllInfo();
+	}
+	
+	@Override
 	public List<FacilityDto> getAllFacility(int page, int size) {
 		
 		return facilityRepository.getAllFacility(page, size);
@@ -32,6 +38,12 @@ public class FacilityServiceImpl implements FacilityService {
 		return facilityRepository.getAllFacilityType();
 	}
 
+	@Override
+	public List<BunryuDto> getDamageTypeOfFacility(int facilityType) {
+		
+		return facilityRepository.getDamageTypeOfFacility(facilityType);
+	}
+	
 	@Override
 	public int registFacility(FacilityDto facilityDto) {
 		// 정상적인 데이터인지 확인
@@ -67,7 +79,6 @@ public class FacilityServiceImpl implements FacilityService {
         
 		// region 가공
         facilityDto.setRegion(facilityDto.getRegionSido() + " " + facilityDto.getRegionSigungu());
-        facilityDto.setAddress(facilityDto.getRegion() + " " + facilityDto.getAddress());
         
 		// 손상 이미지 넣기
 		
@@ -76,5 +87,6 @@ public class FacilityServiceImpl implements FacilityService {
 		// 시설물 데이터 넣기
 		return facilityRepository.registFacility(facilityDto);
 	}
+
 	
 }

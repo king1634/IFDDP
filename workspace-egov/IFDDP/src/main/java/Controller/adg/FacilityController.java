@@ -3,8 +3,10 @@ package Controller.adg;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,10 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -63,15 +67,24 @@ public class FacilityController {
 		return "facilityManage/facilityRegist";
 	}
 	@PostMapping("/facilityRegist")
-	public String postfacilityRegist(FacilityDto facilityDto) {
+	public String postfacilityRegist(FacilityDto facilityDto, RedirectAttributes redirectAttributes) {
 		// 입력 데이터 확인
 		System.out.println(facilityDto);
 		
 		// 시설물 등록
 		int result = facilityService.registFacility(facilityDto);
-		
-		// 시설물 목록으로 이동
-    	return "redirect:/facilityList.do";
+
+	    if (result > 0) {
+	        // 등록 성공 시
+	        redirectAttributes.addFlashAttribute("message", "시설물이 성공적으로 등록되었어요!");
+	        return "redirect:/facilityList.do"; // 목록 페이지로 리다이렉트
+	    } else {
+	        // 등록 실패 시
+	        redirectAttributes.addFlashAttribute("errorMessage", "시설물 등록에 실패했어요. 다시 시도해 주세요.");
+	        
+	        // 다시 등록 폼 페이지로 리다이렉트 (이 경우 현재 폼 페이지를 다시 띄워주는 URL로)
+	        return "redirect:/facilityRegist.do"; 
+	    }
 	}
 	
 	
@@ -83,7 +96,14 @@ public class FacilityController {
 		
 		return bunryuDtos;
 	}
-	
+	@GetMapping(value = "/allDamageTypeOfFacility/{facilityType}", produces = "application/json")
+    @ResponseBody
+	public List<BunryuDto> getDamageTypeOfFacility(@PathVariable int facilityType) {
+        // 요청한 시설물 데이터 가져오기
+		List<BunryuDto> bunryuDtos = facilityService.getDamageTypeOfFacility(facilityType);
+		
+		return bunryuDtos;
+	}
 
 	@GetMapping(value = "/api/seoul/sigungu", produces = "application/json")
     @ResponseBody
@@ -133,4 +153,43 @@ public class FacilityController {
 //        // 결과 반환 (헤더와 상태코드도 그대로 전달)
 //        return new ResponseEntity<>(response.getBody(), response.getHeaders(), response.getStatusCode());
 	}
+	
+	@GetMapping("facilityDownload")
+	@ResponseBody
+	public Object inventoryExcelDownload() {
+		List<FacilityDto> facilityDtos = facilityService.getAllFacilityAllInfo();
+		
+		System.out.println(facilityDtos);
+		
+	    List<Map<String, Object>> excelData = facilityDtos.stream()
+	        .map(datas -> {
+	            Map<String, Object> row = new LinkedHashMap<>(); // 순서 유지를 위해 LinkedHashMap 사용
+	            row.put("시설물 식별자", datas.getFacilityId());
+	            row.put("시설물 명", datas.getFacilityName());
+	            row.put("시설물 종류", datas.getFacilityTypeKorean());
+	            row.put("시설물 규모", datas.getFacilityScaleKorean());
+	            row.put("시설물 위치 좌표", datas.getGeom()); // 변환필요 -> lat,lon
+	            row.put("시설물 지역", datas.getRegion());
+	            row.put("시설물 상세 주소", datas.getAddress());
+	            row.put("시설물 준공년도", datas.getYearBuilt()); // 변환필요
+	            
+//	            // 추가 필요 필드
+//	            좌표LAT
+//	            좌표LON
+//	            선좌표
+//	            면좌표
+	            
+//	            손상유형
+//	            위험도
+//	            점검자
+//	            손상설명
+//	            발생일
+	            
+	            return row;
+	        })
+	        .collect(Collectors.toList());
+		
+		return excelData;
+	}
+	
 }

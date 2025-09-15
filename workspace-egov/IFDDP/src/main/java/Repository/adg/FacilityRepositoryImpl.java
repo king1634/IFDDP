@@ -17,6 +17,41 @@ public class FacilityRepositoryImpl implements FacilityRepository {
 	private final SqlSession sqlSession;
 
 	@Override
+	public int getCntFacility() {
+		int cnt = 0;
+		try {
+			// SELECT : 시설물 데이터
+			cnt = sqlSession.selectOne("Facility.getCntFacility");
+			
+			// System.out.println(facilityDtos);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("시설물 개수 가져오기 실패");
+		}
+		
+		return cnt;
+	}
+
+	@Override
+	public List<FacilityDto> getAllFacilityAllInfo() {
+		List<FacilityDto> facilityDtos = null;
+		
+		try {
+			// SELECT : 시설물 데이터
+			facilityDtos = sqlSession.selectList("Facility.getAllFacilityAllInfo");
+			
+			System.out.println(facilityDtos);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("모든 시설물 모든 정보 가져오기 실패");
+		}
+		
+		return facilityDtos;
+	}
+
+	@Override
 	public List<FacilityDto> getAllFacility(int page, int size) {
 		// 리턴용 데이터 설정
 		List<FacilityDto> facilityDtos = null;
@@ -54,6 +89,25 @@ public class FacilityRepositoryImpl implements FacilityRepository {
 		catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("시설물 종류 가져오기 실패");
+		}
+
+		return bunryuDtos;
+	}
+
+	@Override
+	public List<BunryuDto> getDamageTypeOfFacility(int facilityType) {
+		// 리턴용 데이터 설정
+		List<BunryuDto> bunryuDtos = null;
+		
+		try {
+			// SELECT : 시설물 종류의 모든 손상 종류
+			bunryuDtos = sqlSession.selectList("Facility.getDamageTypeOfFacility", facilityType);
+			
+			// System.out.println(bunryuDtos);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("시설물 종류의 모든 손상 종류 가져오기 실패");
 		}
 
 		return bunryuDtos;
