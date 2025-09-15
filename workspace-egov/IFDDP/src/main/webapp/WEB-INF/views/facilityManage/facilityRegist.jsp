@@ -141,7 +141,7 @@ $(document).ready(function() {
         });
     });
 	
-    let damageCount = 1; // 손상 정보 입력란의 고유 번호를 관리할 변수
+    let damageCount = 0; // 손상 정보 입력란의 고유 번호를 관리할 변수
     $('#addDamageBtn').on('click', function() {
     	// 템플릿 HTML 가져오기
         const templateHtml = $('#damageTemplate').html();
@@ -166,7 +166,7 @@ $(document).ready(function() {
 	    // console.log(damageCount);
 	    
 	    // Date 찾기
-    	$('input[name="damageList[' + damageCount + '].damageDate"]').val(formattedDate);
+    	$('input[name="damageList[' + damageCount + '].reportedDate"]').val(formattedDate);
 
         // 카운터 증가
         damageCount++;
@@ -182,6 +182,13 @@ $(document).ready(function() {
         // 삭제 후 번호 재정렬 함수 호출
         updateDamageIndices();
     });
+ 	// 폼 제출 전에 템플릿 요소를 제외시키기
+    $('#registFacility').on('submit', function(e) {
+        // 템플릿 요소 제거 또는 비활성화
+        $('#damageTemplate').prop('disabled', true);
+        // 또는
+        $('#damageTemplate').remove();
+    });
 });
 
 //인덱스 재정렬 함수
@@ -191,13 +198,13 @@ function updateDamageIndices() {
     
     // 각 행에 대해 인덱스 업데이트
     rows.each(function(index) {
-        const newIndex = index + 1;
+        const newIndex = index;
         
         // 행의 data-index 속성 업데이트
         $(this).attr('data-index', newIndex);
         
         // 행 번호 표시 업데이트
-        $(this).find('.damage-index').text(newIndex);
+        $(this).find('.damage-index').text(newIndex + 1); // 표시용+1
         
         // 모든 input, select 요소의 name 속성 업데이트
         $(this).find('input, select, textarea').each(function() {
@@ -321,7 +328,9 @@ function updateDamageIndices() {
 		                    <th>번호</th>
 		                    <th>손상 유형</th>
 		                    <th>손상 위험도</th>
+		                    <th>손상 수</th>
 		                    <th>손상 설명</th>
+		                    <th>검사관</th>
 		                    <th>발생일자</th>
 		                    <th>이미지</th>
 		                    <th>삭제</th>
@@ -347,18 +356,24 @@ function updateDamageIndices() {
 						            </select>
 						        </td>
 						        <td>
-						            <select class="form-select" name="damageList[INDEX_PLACEHOLDER].damageLevel">
-						                <option value="">선택하세요</option>
-						                <option value="상">상</option>
-						                <option value="중">중</option>
-						                <option value="하">하</option>
+						            <select class="form-select" name="damageList[INDEX_PLACEHOLDER].severity">
+						                <option value="0">선택하세요</option>
+						                <option value="1">상</option>
+						                <option value="2">중</option>
+						                <option value="3">하</option>
 						            </select>
+						        </td>
+						        <td>
+						            <input type="number" class="form-control" name="damageList[INDEX_PLACEHOLDER].damageCnt" value="0">
 						        </td>
 						        <td>
 						            <input type="text" class="form-control" name="damageList[INDEX_PLACEHOLDER].description" placeholder="손상 설명 입력">
 						        </td>
 						        <td>
-						            <input type="date" class="form-control" name="damageList[INDEX_PLACEHOLDER].damageDate">
+						            <input type="text" class="form-control" name="damageList[INDEX_PLACEHOLDER].inspectorId" placeholder="검사관">
+						        </td>
+						        <td>
+						            <input type="date" class="form-control" name="damageList[INDEX_PLACEHOLDER].reportedDate">
 						        </td>
 						        <td>
 						            <input type="file" class="form-control file-input" name="damageList[INDEX_PLACEHOLDER].damageFile" multiple>
