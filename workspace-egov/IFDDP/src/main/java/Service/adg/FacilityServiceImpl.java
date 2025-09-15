@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import Dto.adg.BunryuDto;
 import Dto.adg.FacilityDto;
+import Repository.adg.DamageRepository;
 import Repository.adg.FacilityRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FacilityServiceImpl implements FacilityService {
 	private final FacilityRepository facilityRepository;
+	private final DamageRepository damageRepository;
 
 	@Override
 	public List<FacilityDto> getAllFacilityAllInfo() {
@@ -79,13 +81,16 @@ public class FacilityServiceImpl implements FacilityService {
         
 		// region 가공
         facilityDto.setRegion(facilityDto.getRegionSido() + " " + facilityDto.getRegionSigungu());
-        
+
+		// 시설물 데이터 넣기
+		int resultFacility = facilityRepository.registFacility(facilityDto);
+
+		// 손상 데이터 넣기
+		List<Integer> resultDamage = damageRepository.registDamage(resultFacility, facilityDto.getDamageList());
+		
 		// 손상 이미지 넣기
 		
-		// 손상 데이터 넣기
-		
-		// 시설물 데이터 넣기
-		return facilityRepository.registFacility(facilityDto);
+		return resultFacility;
 	}
 
 	

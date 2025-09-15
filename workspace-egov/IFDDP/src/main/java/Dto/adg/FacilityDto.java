@@ -1,6 +1,7 @@
 package Dto.adg;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -28,4 +29,7 @@ public class FacilityDto {
 	// 표시용 한글 전환
 	private String facilityTypeKorean;
 	private String facilityScaleKorean;
+	
+	// 손상정보
+	private List<DamageDto> damageList;
 }

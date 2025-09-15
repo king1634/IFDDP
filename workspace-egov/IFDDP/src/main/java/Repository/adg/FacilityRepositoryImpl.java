@@ -120,7 +120,10 @@ public class FacilityRepositoryImpl implements FacilityRepository {
 		try {
 			System.out.println(facilityDto);
 			// INSERT : 시설물
-			result = sqlSession.insert("Facility.insertFacility", facilityDto);
+			sqlSession.insert("Facility.insertFacility", facilityDto);
+			
+			// 삽입한 시설물 ID
+			result = facilityDto.getFacilityId();
 		}
 		catch (Exception e) {
 			// TODO: handle exception
