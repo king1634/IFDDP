@@ -76,6 +76,32 @@ public class FacilityRepositoryImpl implements FacilityRepository {
 	}
 
 	@Override
+	public List<FacilityDto> getSearchFacility(FacilityDto facilityDto, int page, int size) {
+		// 리턴용 데이터 설정
+		List<FacilityDto> facilityDtos = null;
+		
+		// 파라미터 설정
+		Map<String, Object> params = new HashMap<>();
+		params.put("facilityDto", facilityDto);
+		params.put("page", page);
+		params.put("size", size);
+		
+		try {
+			// SELECT : 시설물 데이터
+			facilityDtos = sqlSession.selectList("Facility.getSearchFacility", params);
+			
+			// System.out.println(facilityDtos);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("시설물 검색 가져오기 실패");
+			System.out.println(e);
+		}
+
+		return facilityDtos;
+	}
+
+	@Override
 	public List<BunryuDto> getAllFacilityType() {
 		// 리턴용 데이터 설정
 		List<BunryuDto> bunryuDtos = null;

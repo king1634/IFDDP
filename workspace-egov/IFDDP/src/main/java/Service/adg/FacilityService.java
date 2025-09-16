@@ -11,6 +11,9 @@ public interface FacilityService {
 	
 	// 범위 시설물 조회
 	List<FacilityDto> getAllFacility(int page, int size);
+
+	// 범위 시설물 검색 조회
+	List<FacilityDto> getSearchFacility(FacilityDto facilityDto, int page, int size);
 	
 	// 모든 시설물 종류
 	List<BunryuDto> getAllFacilityType();

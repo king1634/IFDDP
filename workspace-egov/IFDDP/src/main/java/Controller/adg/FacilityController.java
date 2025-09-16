@@ -38,25 +38,38 @@ public class FacilityController {
 	private final FacilityService facilityService;
 	
 	@GetMapping("/facilityList.do")
-	public String showFacilityList(Model model) {
+	public String showFacilityList(FacilityDto facilityDto, Model model) {
 		// 기본 10개의 시설물 데이터 가져오기
-		List<FacilityDto> facilityDtos = facilityService.getAllFacility(0, 10);
+		// List<FacilityDto> facilityDtos = facilityService.getAllFacility(0, 10);
 
-		model.addAttribute("facilityList", facilityDtos);
+		// model.addAttribute("facilityList", facilityDtos);
+		model.addAttribute("facilityDto", facilityDto);
 
 		return "facilityManage/facilityList";
 	}
 	
 	@GetMapping(value = "/facility", produces = "application/json")
     @ResponseBody
-	public List<FacilityDto> getFacility(
-            @RequestParam(defaultValue = "1") int page,
+	public List<FacilityDto> getFacility(FacilityDto facilityDto,
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        // 페이지는 1부터 시작하지만, 실제 계산은 0부터 시작해야 함
-        int offset = (page - 1) * size;
+//		System.out.println(facilityDto);
+//		System.out.println(page);
+//		System.out.println(size);
+		
+		// 시설물 데이터 선언
+		List<FacilityDto> facilityDtos = null;
+
+        // 페이지는 0부터 시작
+        int offset = page * size;
         
-        // 요청한 시설물 데이터 가져오기
-		List<FacilityDto> facilityDtos = facilityService.getAllFacility(offset, size);
+		// 검색 조건 판단하기
+		if(facilityDto.getSearchValue() == null || facilityDto.getSearchValue() == "") {
+			facilityDtos = facilityService.getAllFacility(offset, size);
+		}
+		else {
+			facilityDtos = facilityService.getSearchFacility(facilityDto, offset, size);
+		}
 		
 		return facilityDtos;
 	}
