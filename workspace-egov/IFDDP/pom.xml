@@ -205,6 +205,12 @@
 		    <artifactId>commons-fileupload</artifactId>
 		    <version>1.5</version>
 		</dependency>
+	    <!--추가 : 좌표 변환을 위한 jts-->
+	    <dependency>
+		    <groupId>org.locationtech.jts</groupId>
+		    <artifactId>jts-core</artifactId>
+		    <version>1.18.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>

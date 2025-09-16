@@ -17,23 +17,6 @@ public class FacilityRepositoryImpl implements FacilityRepository {
 	private final SqlSession sqlSession;
 
 	@Override
-	public int getCntFacility() {
-		int cnt = 0;
-		try {
-			// SELECT : 시설물 데이터
-			cnt = sqlSession.selectOne("Facility.getCntFacility");
-			
-			// System.out.println(facilityDtos);
-		}
-		catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("시설물 개수 가져오기 실패");
-		}
-		
-		return cnt;
-	}
-
-	@Override
 	public List<FacilityDto> getAllFacilityAllInfo() {
 		List<FacilityDto> facilityDtos = null;
 		
@@ -74,6 +57,22 @@ public class FacilityRepositoryImpl implements FacilityRepository {
 
 		return facilityDtos;
 	}
+	@Override
+	public int getAllFacilityCnt() {
+		int cnt = 0;
+		try {
+			// SELECT : 시설물 데이터
+			cnt = sqlSession.selectOne("Facility.getAllFacilityCnt");
+			
+			// System.out.println(facilityDtos);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("시설물 개수 가져오기 실패");
+		}
+		
+		return cnt;
+	}
 
 	@Override
 	public List<FacilityDto> getSearchFacility(FacilityDto facilityDto, int page, int size) {
@@ -99,6 +98,23 @@ public class FacilityRepositoryImpl implements FacilityRepository {
 		}
 
 		return facilityDtos;
+	}
+	@Override
+	public int getSearchFacilityCnt(FacilityDto facilityDto) {
+		int cnt = 0;
+		try {
+			// SELECT : 시설물 데이터
+			cnt = sqlSession.selectOne("Facility.getSearchFacilityCnt", facilityDto);
+			
+			// System.out.println(facilityDtos);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("시설물 검색 개수 가져오기 실패");
+			System.out.println(e);
+		}
+		
+		return cnt;
 	}
 
 	@Override

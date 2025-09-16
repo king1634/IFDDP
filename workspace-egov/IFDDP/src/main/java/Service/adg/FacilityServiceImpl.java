@@ -33,11 +33,21 @@ public class FacilityServiceImpl implements FacilityService {
 		
 		return facilityRepository.getAllFacility(page, size);
 	}
+	@Override
+	public int getAllFacilityCnt() {
+		
+		return facilityRepository.getAllFacilityCnt();
+	}
 
 	@Override
 	public List<FacilityDto> getSearchFacility(FacilityDto facilityDto, int page, int size) {
 		
 		return facilityRepository.getSearchFacility(facilityDto, page, size);
+	}
+	@Override
+	public int getSearchFacilityCnt(FacilityDto facilityDto) {
+		
+		return facilityRepository.getSearchFacilityCnt(facilityDto);
 	}
 
 	@Override

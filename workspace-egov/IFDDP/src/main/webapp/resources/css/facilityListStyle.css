@@ -17,7 +17,7 @@
 .board-table {
     width: 100%;
     border-collapse: collapse; /* 셀 경계선 병합 */
-    margin-top: 20px;
+    margin-top: 10px;
     font-size: 14px;
 }
 
