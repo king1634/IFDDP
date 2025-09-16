@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.locationtech.jts.geom.Point;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -30,6 +33,7 @@ import org.xml.sax.InputSource;
 import Dto.adg.BunryuDto;
 import Dto.adg.FacilityDto;
 import Service.adg.FacilityService;
+import Util.GISPointConverter;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -41,8 +45,19 @@ public class FacilityController {
 	public String showFacilityList(FacilityDto facilityDto, Model model) {
 		// 기본 10개의 시설물 데이터 가져오기
 		// List<FacilityDto> facilityDtos = facilityService.getAllFacility(0, 10);
-
 		// model.addAttribute("facilityList", facilityDtos);
+
+		// 검색 결과 개수 가져오기
+		int facilityListCount = 0;
+		// 검색 조건 판단하기
+		if(facilityDto.getSearchValue() == null || facilityDto.getSearchValue() == "") {
+			facilityListCount = facilityService.getAllFacilityCnt();
+		}
+		else {
+			facilityListCount = facilityService.getSearchFacilityCnt(facilityDto);
+		}
+		
+		model.addAttribute("facilityListCount", facilityListCount);
 		model.addAttribute("facilityDto", facilityDto);
 
 		return "facilityManage/facilityList";
@@ -170,10 +185,10 @@ public class FacilityController {
 	
 	@GetMapping("facilityDownload")
 	@ResponseBody
-	public Object inventoryExcelDownload() {
+	public Object facilityDownload() {
 		List<FacilityDto> facilityDtos = facilityService.getAllFacilityAllInfo();
 		
-		System.out.println(facilityDtos);
+		// System.out.println(facilityDtos);
 		
 	    List<Map<String, Object>> excelData = facilityDtos.stream()
 	        .map(datas -> {
@@ -182,28 +197,46 @@ public class FacilityController {
 	            row.put("시설물 명", datas.getFacilityName());
 	            row.put("시설물 종류", datas.getFacilityTypeKorean());
 	            row.put("시설물 규모", datas.getFacilityScaleKorean());
-	            row.put("시설물 위치 좌표", datas.getGeom()); // 변환필요 -> lat,lon
+	            // row.put("시설물 위치 좌표", datas.getGeom()); // 변환필요 -> lat,lon
+	            Point datasPoint = GISPointConverter.getLatLonFromGeom(datas.getGeom());
+	            row.put("시설물 위치 좌표 Lat", datasPoint != null ? datasPoint.getY() : ""); // 변환필요 -> lat,lon
+	            row.put("시설물 위치 좌표 Lon", datasPoint != null ? datasPoint.getX() : ""); // 변환필요 -> lat,lon
+	            //선좌표(X)
+	            //면좌표(X)
 	            row.put("시설물 지역", datas.getRegion());
 	            row.put("시설물 상세 주소", datas.getAddress());
 	            row.put("시설물 준공년도", datas.getYearBuilt()); // 변환필요
-	            
-//	            // 추가 필요 필드
-//	            좌표LAT
-//	            좌표LON
-//	            선좌표
-//	            면좌표
-	            
-//	            손상유형
-//	            위험도
-//	            점검자
-//	            손상설명
-//	            발생일
+
+            	row.put("손상유형", datas.getDamageTypeKorean());
+            	// 위험도 0 -> 없음, 1~ -> A~
+            	row.put("위험도", datas.getSeverity() == 0 ? "" : (char)(datas.getSeverity()+64));
+            	row.put("점검자", datas.getInspectorId());
+            	row.put("손상설명", datas.getDescription());
+            	row.put("발생일", datas.getReportedDate());
 	            
 	            return row;
 	        })
 	        .collect(Collectors.toList());
 		
 		return excelData;
+	}
+	
+	@PostMapping("facilityUpload")
+	public ResponseEntity<?> facilityUpload(@RequestParam("file") MultipartFile file) {
+		try {
+            // 파일 확장자 검사
+            if (!file.getOriginalFilename().endsWith(".xlsx") && !file.getOriginalFilename().endsWith(".xls")) {
+                return ResponseEntity.badRequest().body("Excel 파일만 업로드 가능합니다.");
+            }
+            
+            // 서비스에 파일 전달하여 처리
+            // excelService.processExcelFile(file);
+            
+            return ResponseEntity.ok("파일 업로드 및 처리 완료");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 처리 중 오류 발생: " + e.getMessage());
+        }
 	}
 	
 }
