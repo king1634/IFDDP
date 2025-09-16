@@ -18,6 +18,26 @@
         SELECT * FROM Facility LIMIT ${size} OFFSET ${page}
     </select>
     
+    <select id="getSearchFacility" resultType="Dto.adg.FacilityDto">
+        SELECT * FROM Facility 
+        <choose>
+            <when test="facilityDto.searchType == 'FACILITY_ID'">
+                WHERE "FACILITY_ID" = CAST(#{facilityDto.searchValue} AS INTEGER)
+            </when>
+            <when test="facilityDto.searchType == 'FACILITY_NAME'">
+                WHERE "FACILITY_NAME" LIKE '%' || #{facilityDto.searchValue} || '%'
+            </when>
+            <when test="facilityDto.searchType == 'ADDRESS'">
+                WHERE "ADDRESS" LIKE '%' || #{facilityDto.searchValue} || '%' 
+                OR "REGION" LIKE '%' || #{facilityDto.searchValue} || '%'
+            </when>
+            <when test="facilityDto.searchType == 'YEAR_BULIT'">
+                WHERE EXTRACT(YEAR FROM "YEAR_BUILT") = CAST(#{facilityDto.searchValue} AS INTEGER)
+            </when>
+        </choose>
+        LIMIT ${size} OFFSET ${page}
+    </select>
+    
     <select id="getAllFacilityType" resultType="Dto.adg.BunryuDto">
         SELECT * FROM bunryu 
         WHERE "BCD" = 200 AND "MCD" != 999

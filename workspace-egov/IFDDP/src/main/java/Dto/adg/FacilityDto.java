@@ -30,6 +30,10 @@ public class FacilityDto {
 	private String facilityTypeKorean;
 	private String facilityScaleKorean;
 	
+	// 검색용 DTO
+	private String 	searchType; // 검색조건
+	private String 	searchValue; // 검색어
+	
 	// 손상정보
 	private List<DamageDto> damageList;
 }

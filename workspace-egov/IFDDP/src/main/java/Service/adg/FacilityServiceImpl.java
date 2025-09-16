@@ -35,6 +35,12 @@ public class FacilityServiceImpl implements FacilityService {
 	}
 
 	@Override
+	public List<FacilityDto> getSearchFacility(FacilityDto facilityDto, int page, int size) {
+		
+		return facilityRepository.getSearchFacility(facilityDto, page, size);
+	}
+
+	@Override
 	public List<BunryuDto> getAllFacilityType() {
 		
 		return facilityRepository.getAllFacilityType();
