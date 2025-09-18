@@ -92,7 +92,7 @@
                 // 데이터가 없으면 모든 항목 로드 완료
                 if (response.length === 0) {
                     allItemsLoaded = true;
-                    $('.board-table tbody').append('<tr class="end-row"><td colspan="5" style="text-align:center;">모든 시설물을 불러왔어요! 🎉</td></tr>');
+                    $('.board-table tbody').append('<tr class="end-row"><td colspan="6" style="text-align:center;">모든 시설물을 불러왔어요! 🎉</td></tr>');
                     return;
                 }
                 
@@ -146,40 +146,74 @@
         });
     }
     
-function facilityDownload(){
-	// JSP 변수를 JavaScript 변수로 저장
-	const contextPath = "${pageContext.request.contextPath}";
-
-	/* 검색조건에 맞는 데이터 모두 가져온다(AJAX) */
-	fetch(contextPath + "/facilityDownload")
-		.then(response => response.json())
-		.then(data => {
-			
-			// 워크북 생성
-			const workbook = XLSX.utils.book_new();
-
-			// JSON을 워크시트로 변환
-			const worksheet = XLSX.utils.json_to_sheet(data);
-
-			// 워크시트를 워크북에 추가
-			XLSX.utils.book_append_sheet(workbook, worksheet, "시설물 목록");
-
-			// 현재 시간 포맷팅하기
-			const now = new Date();
-			const year = now.getFullYear();
-			const month = String(now.getMonth() + 1).padStart(2, '0');
-			const day = String(now.getDate()).padStart(2, '0');
-
-			// 시간 문자열 만들기
-			const timeString = year + month + day;
-
-			// 파일로 저장
-			// 브라우저에서는 다운로드 형태로 저장됨
-			XLSX.writeFile(workbook, "시설물 목록" + timeString + ".xlsx");
-		})
-		.catch(error => console.error("다운로드 오류:", error));
+	function facilityDownload(){
+		// JSP 변수를 JavaScript 변수로 저장
+		const contextPath = "${pageContext.request.contextPath}";
 	
-}
+		/* 검색조건에 맞는 데이터 모두 가져온다(AJAX) */
+		fetch(contextPath + "/facilityDownload")
+			.then(response => response.json())
+			.then(data => {
+				
+				// 워크북 생성
+				const workbook = XLSX.utils.book_new();
+	
+				// JSON을 워크시트로 변환
+				const worksheet = XLSX.utils.json_to_sheet(data);
+	
+				// 워크시트를 워크북에 추가
+				XLSX.utils.book_append_sheet(workbook, worksheet, "시설물 목록");
+	
+				// 현재 시간 포맷팅하기
+				const now = new Date();
+				const year = now.getFullYear();
+				const month = String(now.getMonth() + 1).padStart(2, '0');
+				const day = String(now.getDate()).padStart(2, '0');
+	
+				// 시간 문자열 만들기
+				const timeString = year + month + day;
+	
+				// 파일로 저장
+				// 브라우저에서는 다운로드 형태로 저장됨
+				XLSX.writeFile(workbook, "시설물 목록" + timeString + ".xlsx");
+			})
+			.catch(error => console.error("다운로드 오류:", error));
+	}
+	
+	$(function() {
+	    $('#excelFileUpload').on('change', function() {
+	        const selectedFile = this.files[0];
+	        if(selectedFile) {
+	        	// 파일 전달을 위해 FormData 객체 생성
+	            const formData = new FormData();
+	            formData.append('file', selectedFile);
+	            
+	         	// Ajax로 컨트롤러 호출
+	            $.ajax({
+	                url: '${pageContext.request.contextPath}/facilityUpload', // 컨트롤러 URL
+	                type: 'POST',
+	                data: formData,
+	                processData: false,  // 필수: FormData 처리 방지
+	                contentType: false,  // 필수: 컨텐트 타입 자동 설정
+	                success: function(response) {
+	                    console.log('업로드 성공:', response);
+	                    alert('Excel 파일 업로드 성공!');
+	                    // 성공 후 처리 (예: 페이지 새로고침)
+	                    // location.reload();
+	                },
+	                error: function(error) {
+	                    console.error('업로드 실패:', error);
+	                    alert('Excel 파일 업로드 실패!');
+	                },
+	                // finally
+	                complete: function() {
+	                	// 새로고침
+	                	location.reload();
+	                }
+	            });
+	        }
+	    });
+	});
 </script>
 <body>
 	<%-- 사이드바 include: 반드시 BODY 안에 --%>
@@ -199,7 +233,8 @@ function facilityDownload(){
 			<!-- 등록 -->
 			<button class="regist-btn" onclick="location.href='facilityRegist.do'">등록</button>
 			<button class="regist-btn" onclick="facilityDownload()">Excel 다운로드</button>
-			<button class="regist-btn">Excel 업로드</button>
+			<input type="file" id="excelFileUpload" style="display: none;">
+			<button class="regist-btn" onclick="document.getElementById('excelFileUpload').click()">Excel 업로드</button>
 			<!-- 검색 -->
 			<div style="margin: auto 0 auto auto;">
 				<form action="${pageContext.request.contextPath}/facilityList.do">
@@ -214,6 +249,9 @@ function facilityDownload(){
 					<input class="search-button" type="submit" value="검색">
 				</form>
 			</div>
+		</div>
+		<div style="text-align: right; margin-top: 5px;">
+			<span>검색결과 : ${facilityListCount}건</span>
 		</div>
 		
 		<table class="board-table">

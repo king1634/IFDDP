@@ -358,9 +358,11 @@ function updateDamageIndices() {
 						        <td>
 						            <select class="form-select" name="damageList[INDEX_PLACEHOLDER].severity">
 						                <option value="0">선택하세요</option>
-						                <option value="1">상</option>
-						                <option value="2">중</option>
-						                <option value="3">하</option>
+						                <option value="1">A</option>
+						                <option value="2">B</option>
+						                <option value="3">C</option>
+						                <option value="4">D</option>
+						                <option value="5">E</option>
 						            </select>
 						        </td>
 						        <td>

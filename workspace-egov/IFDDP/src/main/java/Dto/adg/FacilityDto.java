@@ -1,5 +1,6 @@
 package Dto.adg;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,11 +30,18 @@ public class FacilityDto {
 	// 표시용 한글 전환
 	private String facilityTypeKorean;
 	private String facilityScaleKorean;
+	// 조인용 손상 정보
+	private String damageTypeKorean;
+	private int severity;
+	private int damageCnt;
+	private String inspectorId;
+	private String description;
+	private String reportedDate;
 	
 	// 검색용 DTO
 	private String 	searchType; // 검색조건
 	private String 	searchValue; // 검색어
 	
 	// 손상정보
-	private List<DamageDto> damageList;
+	private List<DamageDto> damageList = new ArrayList<>();
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Aging">
+
+
+	<select id="AgingPatternDots" parameterType="int"
+		resultType="Dto.adg.FacilityDto">
+		SELECT
+		f."FACILITY_ID" AS facilityId,
+		f."FACILITY_NAME" AS facilityName,
+		f."FACILITY_TYPE" AS facilityType,
+		f."ADDRESS" AS address,
+		ST_Y(ST_Transform(f."GEOM", 4326)) AS facilityGeomY,
+		ST_X(ST_Transform(f."GEOM", 4326)) AS facilityGeomX,
+		'위험' AS damageTypeKorean
+		FROM FACILITY f
+		<where>
+			<if test="_parameter != null and _parameter != 0">
+				AND f."FACILITY_TYPE" = #{_parameter}  <!-- 단일 기본타입은 _parameter/value -->
+			</if>
+		</where>
+	</select>
+
+
+</mapper>
