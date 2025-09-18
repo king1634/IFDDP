@@ -17,7 +17,7 @@
 .board-table {
     width: 100%;
     border-collapse: collapse; /* 셀 경계선 병합 */
-    margin-top: 20px;
+    margin-top: 10px;
     font-size: 14px;
 }
 
@@ -60,7 +60,7 @@
 }
 
 .control-div .regist-btn {
-    background: #D3DEEC; /* 깔끔한 하늘색 */
+    background: #e7f0fa; /* 깔끔한 하늘색 */
     color: #3C4257; /* 배경보다 조금 어두운 색 */
     padding: 10px 18px;
     border: none;
@@ -75,4 +75,36 @@
     display: inline-block; /* 버튼이 내용만큼 크기를 차지하고 옆으로 나열 */
 }
 
-
+.search-label {
+	font-size: 14px;
+	color: #000;
+}
+.search-select {
+	border: 1px solid #d1d5db;
+	background: #fff;
+	border-radius: 10px;
+	padding: 10px 12px;
+	height: 40px;
+	font-size: 14px;
+	outline: none;
+	transition: border-color .15s, box-shadow .15s;
+}
+.search-text {
+	font-size: 12px;
+	color: #475569;
+	height: 40px;
+}
+.search-button {
+    background: #e7f0fa;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    /* 전환 효과: 마우스 오버 시 부드럽게 변하도록 */
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    text-align: center;
+    /* 텍스트 장식: 없애기 (링크처럼 보이지 않게) */
+    text-decoration: none;
+    display: inline-block; /* 버튼이 내용만큼 크기를 차지하고 옆으로 나열 */
+}

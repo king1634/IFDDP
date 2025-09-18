@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Damage">
+    <!-- 등록하고 등록된 시설물ID를 반환 -->
+    <insert id="insertDamage" parameterType="Dto.adg.DamageDto" useGeneratedKeys="true" keyProperty="damageId">
+	    INSERT INTO Damage (
+	        "FACILITY_ID", 
+	        "DAMAGE_TYPE", 
+	        "SEVERITY",
+	        "DAMAGE_CNT",
+	        "DESCRIPTION",
+	        "INSPECTOR_ID",
+	        "REPORTED_DATE"
+	    ) VALUES (
+	        #{facilityId},
+	        #{damageType},
+	        #{severity},
+	        #{damageCnt},
+	        #{description},
+	        #{inspectorId},
+	        #{reportedDate}
+	    )
+	</insert>
+	
+	<insert id="insertDamageImg" parameterType="Dto.adg.DamageImgDto">
+	    INSERT INTO damage_img (
+	        "DAMAGE_ID", 
+	        "ORD", 
+	        "FILE_NAME"
+	    ) VALUES (
+	        #{damageId},
+	        #{ord},
+	        #{fileName}
+	    )
+	</insert>
+	
+    <select id="getDamageType" resultType="int">
+        SELECT "MCD" FROM bunryu 
+        WHERE "BCD" = 300 AND "CONTENTS" = #{typeKorean}
+    </select>
+    
+</mapper>
